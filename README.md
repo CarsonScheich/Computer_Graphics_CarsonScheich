@@ -15,8 +15,10 @@ Then, to build this source, you would
 
 ```
 cd buildVCPkg
-cmake --build .
+cmake --build . or make
 ```
+
+./raytracer > 4kblackhole.png
 
 Your executables will then be in the build folder. They may be in sub-folders depending on the environment.
 

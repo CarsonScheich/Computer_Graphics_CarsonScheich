@@ -1,10 +1,10 @@
-/* #include "ray.h"
+#include "ray.h"
 #include "vec3.h"
 
 #include <iostream>
 
-
 /*
+
 vec3 ray_color(const ray& r) {
     return vec3(0,0,0);
 }
@@ -19,32 +19,93 @@ int main() {
 
 
 }
+    */
     
+vec3 ray_color(const ray& r) {
+
+    vec3 unit_direction = r.direction() / r.direction().length();
+
+    return 0.5 * vec3(
+
+        unit_direction.x() + 1.0,
+
+        unit_direction.y() + 1.0,
+
+        unit_direction.z() + 1.0
+
+    );
+
+}
 
 int main() {
 
     // Image
 
-    int image_width = 256;
-    int image_height = 256;
+    auto aspect_ratio = 1.0;
+    int image_width = 200;
 
-    // Render
+    // Calculate the image height, and ensure that it's at least 1.
+    int image_height = int(image_width / aspect_ratio);
+    image_height = (image_height < 1) ? 1 : image_height;
 
-    std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+    // Camera
+
+    auto focal_length = 1.5;
+    auto viewport_height = 2.0;
+    auto viewport_width = 2.0;
+    auto camera_center = point3(0, 0, 0);
+    auto view_direction = vec3(1,3,5);
+
+auto forward = view_direction / view_direction.length();
+
+// Pick which direction is "up" in the world
+auto world_up = vec3(0, 1, 0);
+
+// Find the camera's right direction
+    auto right = cross(forward, world_up);
+    right = right / right.length();
+
+// Find the camera's down direction
+    auto down = cross(forward, right);
+
+// Build the 2x2 viewport
+    auto viewport_u = viewport_width * right;
+    auto viewport_v = viewport_height * down;
+
+
+    // Calculate the horizontal and vertical delta vectors from pixel to pixel.
+    auto pixel_delta_u = viewport_u / image_width;
+    auto pixel_delta_v = viewport_v / image_height;
+
+    
+    // Calculate the location of the upper left pixel.
+    auto viewport_upper_left = camera_center
+                         + focal_length * forward
+                         - viewport_u/2
+                         - viewport_v/2;
+    auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
+
+
+    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
 
     for (int j = 0; j < image_height; j++) {
         std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
         for (int i = 0; i < image_width; i++) {
-            auto pixel_color = vec3(double(i)/(image_width-1), double(j)/(image_height-1), 0);
+            auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
+            auto ray_direction = pixel_center - camera_center;
+            ray r(camera_center, ray_direction);
+
+            vec3 pixel_color = ray_color(r);
             write_color(std::cout, pixel_color);
         }
     }
 
     std::clog << "\rDone.                 \n";
 }
-*/
 
 
+
+/*
 #include "ray.h"
 #include "vec3.h"
 
@@ -53,8 +114,8 @@ int main() {
 
 int main() {
 
-    const int image_width = 900;
-    const int image_height = 600;
+    const int image_width = 3840;
+    const int image_height = 2160;
 
     std::cout << "P3\n"
               << image_width << ' ' << image_height
@@ -357,3 +418,5 @@ int main() {
     std::clog
         << "\rDone.                 \n";
 }
+
+*/

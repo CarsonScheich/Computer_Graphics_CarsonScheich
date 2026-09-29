@@ -90,6 +90,8 @@ inline vec3 operator/(const vec3& v, double t) {
         return v / v.length();
  }
 
+ using color = vec3;
+
  void write_color(std::ostream& out, const vec3& pixel_color) {
     auto r = pixel_color.x();
     auto g = pixel_color.y();

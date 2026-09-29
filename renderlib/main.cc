@@ -1,5 +1,9 @@
 #include "ray.h"
 #include "vec3.h"
+#include "Sphere.h"
+#include "Hittable.h"
+#include "Framebuffer.h"
+
 
 #include <iostream>
 
@@ -21,21 +25,21 @@ int main() {
 }
     */
     
-vec3 ray_color(const ray& r) {
+vec3 ray_color(const ray& r, const Shape& shape) {
 
-    vec3 unit_direction = r.direction() / r.direction().length();
+    HitRecord rec;
 
-    return 0.5 * vec3(
+    if (shape.hit(0.001, 1000.0, r, rec)) {
 
-        unit_direction.x() + 1.0,
+        return 0.5 * (rec.normal + vec3(1,0,0));
 
-        unit_direction.y() + 1.0,
+    }
 
-        unit_direction.z() + 1.0
+        vec3 unit_direction = r.direction() / r.direction().length();
 
-    );
+    return 0.5 * vec3(.5,.5,.5);
 
-}
+};
 
 int main() {
 
@@ -54,7 +58,7 @@ int main() {
     auto viewport_height = 2.0;
     auto viewport_width = 2.0;
     auto camera_center = point3(0, 0, 0);
-    auto view_direction = vec3(1,3,5);
+    auto view_direction = vec3(0,0,-1);
 
 auto forward = view_direction / view_direction.length();
 
@@ -85,6 +89,13 @@ auto world_up = vec3(0, 1, 0);
                          - viewport_v/2;
     auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
+            double rad = 4;
+            point3 center = {0.0,0.0,-5.0};
+
+            Sphere sphere(point3(0,0,-5), 1);
+
+            Shape& shape = sphere;
+
 
     std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
 
@@ -95,7 +106,8 @@ auto world_up = vec3(0, 1, 0);
             auto ray_direction = pixel_center - camera_center;
             ray r(camera_center, ray_direction);
 
-            vec3 pixel_color = ray_color(r);
+
+            vec3 pixel_color = ray_color(r, shape);
             write_color(std::cout, pixel_color);
         }
     }

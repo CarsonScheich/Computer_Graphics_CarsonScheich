@@ -1,6 +1,6 @@
 #include <vector>
 #include <string>
-#include <vec3.h>
+#include "vec3.h"
 
 class Framebuffer {
     public:

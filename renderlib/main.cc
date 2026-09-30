@@ -31,13 +31,13 @@ vec3 ray_color(const ray& r, const Shape& shape) {
 
     if (shape.hit(0.001, 1000.0, r, rec)) {
 
-        return 0.5 * (rec.normal + vec3(1,0,0));
+        return vec3(1.0,0.0,0.0);
 
     }
 
         vec3 unit_direction = r.direction() / r.direction().length();
 
-    return 0.5 * vec3(.5,.5,.5);
+    return vec3(1.0,1.0,1.0);
 
 };
 
@@ -89,7 +89,7 @@ auto world_up = vec3(0, 1, 0);
                          - viewport_v/2;
     auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
-            double rad = 4;
+            double rad = 1.0;
             point3 center = {0.0,0.0,-5.0};
 
             Sphere sphere(center, rad);

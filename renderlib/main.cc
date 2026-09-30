@@ -92,7 +92,7 @@ auto world_up = vec3(0, 1, 0);
             double rad = 4;
             point3 center = {0.0,0.0,-5.0};
 
-            Sphere sphere(point3(0,0,-5), 1);
+            Sphere sphere(center, rad);
 
             Shape& shape = sphere;
 

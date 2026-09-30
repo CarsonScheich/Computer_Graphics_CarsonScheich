@@ -8,12 +8,9 @@
 
 struct HitRecord {
 
-
     point3 p;
     vec3 normal;
     double t; //smaller means closer
-
-
 
 };
 
@@ -21,9 +18,8 @@ struct HitRecord {
 class Shape {
 public:
 
-    virtual bool hit(double t_min, double t_max, const ray& r, HitRecord rec) const = 0;
+    virtual bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const = 0;
 
-    virtual bool intersect( const ray &r, const float tmin, float &tmax ) = 0;
 
 
 

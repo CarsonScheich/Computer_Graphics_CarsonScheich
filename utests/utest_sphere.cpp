@@ -7,7 +7,7 @@
 
 TEST_CASE("RAY HITS SPHERE") {
 
-    Sphere sphere(point3(0, 0, -5), 1.0);
+    Sphere sphere(point3(0, 0, -5), 1.0, color(1,1,1));
     ray r(
         point3(0, 0, 0),
         vec3(0, 0, -1)
@@ -18,7 +18,7 @@ TEST_CASE("RAY HITS SPHERE") {
 
 TEST_CASE("RAY MISSES SPHERE") {
 
-    Sphere sphere(point3(0, 0, -5), 1.0);
+    Sphere sphere(point3(0, 0, -5), 1.0,color(1,1,1));
     ray r(
         point3(0, 0, 0),
         vec3(0, 1, 0)

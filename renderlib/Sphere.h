@@ -9,7 +9,7 @@
 class Sphere : public Shape {
     public:
 
-    Sphere(const point3& center, double radius) : center(center), radius(std::fmax(0,radius)) {}
+    Sphere(const point3& center, double radius, color col) : center(center), radius(std::fmax(0,radius)) {}
 
 
 bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const override {
@@ -36,12 +36,15 @@ bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const overrid
     rec.t = t;
     rec.p = r.at(t);
     rec.normal = (rec.p - center) / radius;
+    rec.hit_color = Sphere_color;
     return true;
 }
+
 
     private:
         point3 center;
         double radius;
+        color Sphere_color;
 
 };
 

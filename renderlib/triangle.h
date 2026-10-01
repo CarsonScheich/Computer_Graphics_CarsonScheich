@@ -8,7 +8,7 @@
 
 class Triangle : public Shape {
     public: 
-    Triangle(const point3 alpha, const point3 beta, const point3 gamma) : alpha(alpha), beta(beta), gamma(gamma) {}
+    Triangle(const point3 alpha, const point3 beta, const point3 gamma, color col ) : alpha(alpha), beta(beta), gamma(gamma), Triangle_color(col) {}
     
     bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const override{
         double a = alpha.x() - beta.x();
@@ -25,7 +25,7 @@ class Triangle : public Shape {
 
         double j = alpha.x() - r.origin().x();
         double k = alpha.y() - r.origin().y();
-        double l = alpha.z() - r.direction().z();
+        double l = alpha.z() - r.origin().z();
 
 
         double M = a * (e*i - h*f) + b* (g*f - d*i) + c * (d*h - e*g);
@@ -36,29 +36,34 @@ class Triangle : public Shape {
 
         double t = -(f * (a*k - j*b) + e * (j*c - a*l)+ d * (b*l - k*c)) / M;
 
+        rec.t = t;
+
          if (t < t_min || t> t_max) {
             return false;
          }
 
-         double gamma_val = (i * (a*k - j*b) + h * (j*c -a*l) + g*(b*l - k*c)/M);
+         double gamma_val = (i * (a*k - j*b) + h * (j*c - a*l) + g*(b*l - k*c))/ M;
 
          if (gamma_val < 0 || gamma_val > 1 ) {
             return false;
          }
 
-         double beta_val = (j * (e*i - h*f) + k * (g*f + d*i) + l * (d*h - e*g)/M);
+         double beta_val = (j * (e*i - h*f) + k * (g*f - d*i) + l * (d*h - e*g))/ M;
 
-         if (beta_val < 0 || beta_val > 1) {
+         if (beta_val < 0 || beta_val > 1 - gamma_val) {
             return false;
          }
-
+         rec.hit_color = Triangle_color;
+         //rec.hit_color = hit_color;
          return true;
 
     }
 
 
+
     private:
     point3 alpha, beta, gamma;
+    color Triangle_color;
 // a d g alpha
 //b e h beta
 //c f i. gamma

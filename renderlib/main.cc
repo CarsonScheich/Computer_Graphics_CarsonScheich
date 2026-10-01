@@ -3,9 +3,79 @@
 #include "Sphere.h"
 #include "Hittable.h"
 #include "Framebuffer.h"
+#include "Shader.h"
+#include "PerspectiveCamera.h"
+#include "Triangle.h"
+#include "Hittable_list.h"
 
 
 #include <iostream>
+
+
+    
+vec3 ray_color(const ray& r, const Shape& shape) {
+    HitRecord rec;
+    shader normalshader;
+
+    if (shape.hit(0.001, 1000.0, r, rec)) {
+        return rec.hit_color;
+    }
+        vec3 unit_direction = r.direction() / r.direction().length();
+    return color(1.0,1.0,1.0);
+};
+
+
+int main() {
+    // Image
+
+    auto aspect_ratio = 1.0;
+    int image_width = 200;
+    // Calculate the image height, and ensure that it's at least 1.
+    int image_height = int(image_width / aspect_ratio);
+    image_height = (image_height < 1) ? 1 : image_height;
+
+    // Camera
+
+Perspective camera(
+    point3(0, 0, 0),   // camera position
+    vec3(0, 0, -1),    // view direction
+    2.0,               // image plane width
+    2.0,               // image plane height
+    image_width,
+    image_height,
+    1.5                // focal length
+);
+
+            auto sphere1 = std::make_shared<Sphere>(point3(0.0,0.0,-10.0),1.0,color(0,0,0));
+
+            auto triangle1 = std::make_shared<Triangle>(point3 (-1.2,-.2,-7),point3(.8,-.5,-5),point3 (.9,0,-5),color(1,0,0));
+
+            auto triangle2 = std::make_shared<Triangle>(point3(0.773205, -0.93923, -7),point3( 0.0330127, 0.94282, -5),point3(-0.45,0.779423,-5),color(0,1,0));
+
+            auto triangle3 = std::make_shared<Triangle>(point3(0.426795,1.13923,-7),point3(-0.833013,-0.44282,-5),point3(-0.45,-0.779423,-5),color(0,0,1));
+
+            shape_list object;
+            object.add(triangle1);
+            object.add(triangle2);
+            object.add(triangle3);
+            object.add(sphere1);
+
+    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
+
+    for (int j = 0; j < image_height; j++) {
+        std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
+        for (int i = 0; i < image_width; i++) {
+            ray r;
+            camera.generateRay(i,j,r);
+            color pixel_color = ray_color(r,object);
+            write_color(std::cout, pixel_color);
+
+    }
+
+    //std::clog << "\rDone.                 \n";
+}
+}
+
 
 /*
 
@@ -24,97 +94,6 @@ int main() {
 
 }
     */
-    
-vec3 ray_color(const ray& r, const Shape& shape) {
-
-    HitRecord rec;
-
-    if (shape.hit(0.001, 1000.0, r, rec)) {
-
-        return vec3(1.0,0.0,0.0);
-
-    }
-
-        vec3 unit_direction = r.direction() / r.direction().length();
-
-    return vec3(1.0,1.0,1.0);
-
-};
-
-int main() {
-
-    // Image
-
-    auto aspect_ratio = 1.0;
-    int image_width = 200;
-
-    // Calculate the image height, and ensure that it's at least 1.
-    int image_height = int(image_width / aspect_ratio);
-    image_height = (image_height < 1) ? 1 : image_height;
-
-    // Camera
-
-    auto focal_length = 1.5;
-    auto viewport_height = 2.0;
-    auto viewport_width = 2.0;
-    auto camera_center = point3(0, 0, 0);
-    auto view_direction = vec3(0,0,-1);
-
-auto forward = view_direction / view_direction.length();
-
-// Pick which direction is "up" in the world
-auto world_up = vec3(0, 1, 0);
-
-// Find the camera's right direction
-    auto right = cross(forward, world_up);
-    right = right / right.length();
-
-// Find the camera's down direction
-    auto down = cross(forward, right);
-
-// Build the 2x2 viewport
-    auto viewport_u = viewport_width * right;
-    auto viewport_v = viewport_height * down;
-
-
-    // Calculate the horizontal and vertical delta vectors from pixel to pixel.
-    auto pixel_delta_u = viewport_u / image_width;
-    auto pixel_delta_v = viewport_v / image_height;
-
-    
-    // Calculate the location of the upper left pixel.
-    auto viewport_upper_left = camera_center
-                         + focal_length * forward
-                         - viewport_u/2
-                         - viewport_v/2;
-    auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
-
-            double rad = 1.0;
-            point3 center = {0.0,0.0,-5.0};
-
-            Sphere sphere(center, rad);
-
-            Shape& shape = sphere;
-
-
-    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
-
-    for (int j = 0; j < image_height; j++) {
-        std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
-        for (int i = 0; i < image_width; i++) {
-            auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
-            auto ray_direction = pixel_center - camera_center;
-            ray r(camera_center, ray_direction);
-
-
-            vec3 pixel_color = ray_color(r, shape);
-            write_color(std::cout, pixel_color);
-        }
-    }
-
-    std::clog << "\rDone.                 \n";
-}
-
 
 
 /*

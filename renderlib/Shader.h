@@ -4,10 +4,10 @@
 #include "vec3.h"
 #include "Hittable.h"
 
-class shader {
+class Shader {
     public:
 
-    virtual vec3 raycolor(const HitRecord& rec) const {
+    virtual color raycolor(const HitRecord& rec) const {
         return 0.5 * (rec.normal + vec3(1.0, 1.0, 1.0));
     }
 

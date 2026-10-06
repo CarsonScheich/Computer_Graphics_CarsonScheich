@@ -4,10 +4,17 @@
 #include "Sphere.h"
 #include "ray.h"
 #include "vec3.h"
+#include "Light.h"
+#include "Shader.h"
+#include "Lambertian_Shader.h"
 
 TEST_CASE("RAY HITS SPHERE") {
+    Light light(point3(5, 5, 0));
 
-    Sphere sphere(point3(0, 0, -5), 1.0, color(1,1,1));
+    auto redLambertian =
+    std::make_shared<Lambertian>(light);
+
+    Sphere sphere(point3(0, 0, -5), 1.0, color(1,1,1),redLambertian);
     ray r(
         point3(0, 0, 0),
         vec3(0, 0, -1)
@@ -17,8 +24,12 @@ TEST_CASE("RAY HITS SPHERE") {
 }
 
 TEST_CASE("RAY MISSES SPHERE") {
+    Light light(point3(5, 5, 0));
 
-    Sphere sphere(point3(0, 0, -5), 1.0,color(1,1,1));
+auto redLambertian =
+    std::make_shared<Lambertian>(light);
+
+    Sphere sphere(point3(0, 0, -5), 1.0,color(1,1,1),redLambertian);
     ray r(
         point3(0, 0, 0),
         vec3(0, 1, 0)

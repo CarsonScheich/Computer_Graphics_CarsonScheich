@@ -8,13 +8,14 @@
 #include <memory>
 #include <vector>
 
-struct HitRecord {
+class Shader;
 
+struct HitRecord {
     point3 p;
     vec3 normal;
     double t; //smaller means closer
     color hit_color = color(.5,.5,.5);
-
+    std::shared_ptr<Shader> shader;
 };
 
 using std::make_shared;

@@ -1,3 +1,6 @@
+#ifndef PERSPECTIVE_CAMERA_H
+#define PERSPECTIVE_CAMERA_H
+
 #include "camera.h"
 
 class Perspective : public Camera {
@@ -57,6 +60,10 @@ class Perspective : public Camera {
     r = ray(origin, ray_direction);
 }
 
+    point3 getposition(){
+        return origin;
+    }
+
     private:
     point3 origin;
 
@@ -70,3 +77,5 @@ class Perspective : public Camera {
 
     double focalLength;
 };
+
+#endif

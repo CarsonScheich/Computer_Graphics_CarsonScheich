@@ -8,7 +8,8 @@
 
 class Triangle : public Shape {
     public: 
-    Triangle(const point3 alpha, const point3 beta, const point3 gamma, color col ) : alpha(alpha), beta(beta), gamma(gamma), Triangle_color(col) {}
+    Triangle(const point3 alpha, const point3 beta, const point3 gamma, color col, std::shared_ptr<Shader> shade) 
+    : alpha(alpha), beta(beta), gamma(gamma), Triangle_color(col), shader(shade){}
     
     bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const override{
         double a = alpha.x() - beta.x();
@@ -27,6 +28,7 @@ class Triangle : public Shape {
         double k = alpha.y() - r.origin().y();
         double l = alpha.z() - r.origin().z();
 
+        rec.normal = unit_vector(cross(beta - alpha, gamma - alpha));
 
         double M = a * (e*i - h*f) + b* (g*f - d*i) + c * (d*h - e*g);
         // deviding by 0 is undefined and this case can be thrown out
@@ -35,7 +37,7 @@ class Triangle : public Shape {
          }
 
         double t = -(f * (a*k - j*b) + e * (j*c - a*l)+ d * (b*l - k*c)) / M;
-
+        rec.p = r.at(t);
         rec.t = t;
 
          if (t < t_min || t> t_max) {
@@ -64,6 +66,7 @@ class Triangle : public Shape {
     private:
     point3 alpha, beta, gamma;
     color Triangle_color;
+    std::shared_ptr<Shader> shader;
 // a d g alpha
 //b e h beta
 //c f i. gamma

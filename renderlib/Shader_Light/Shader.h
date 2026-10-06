@@ -1,8 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "vec3.h"
-#include "Hittable.h"
+#include "../vec3.h"
+#include "../Shapes/Hittable.h"
 
 class Shader {
     public:

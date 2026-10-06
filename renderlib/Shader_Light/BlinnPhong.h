@@ -2,9 +2,9 @@
 #define BLINNPHONG_H
 
 #include "Shader.h"
-#include "vec3.h"
+#include "../vec3.h"
 #include "Light.h"
-#include "PerspectiveCamera.h"
+#include "../Cameras/PerspectiveCamera.h"
 #include <algorithm>
 
 
@@ -27,11 +27,7 @@ class BlinnPhong : public Shader{
 
         //return albedo * diffuse + color(1.0,1.0,1.0) * (.2 *specular);
         color shaded = labertianComponent + color(1.0,1.0,1.0) * specularComponent;
-return color(
-    std::clamp(shaded.x(), 0.0, 1.0),
-    std::clamp(shaded.y(), 0.0, 1.0),
-    std::clamp(shaded.z(), 0.0, 1.0)
-);
+        return clamp_color(shaded);
 
     }
 

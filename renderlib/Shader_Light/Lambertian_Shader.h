@@ -2,10 +2,11 @@
 #define LAMBERTIAN_SAHDER_H
 
 #include "Shader.h"
-#include "vec3.h"
-#include "Hittable.h"
-#include "Hittable_list.h"
 #include "Light.h"
+#include "../vec3.h"
+#include "../Shapes/Hittable.h"
+#include "../Shapes/Hittable_list.h"
+
 
 
 class Lambertian : public Shader {

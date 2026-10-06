@@ -3,8 +3,8 @@
 
 
 #include <cmath>
-#include "ray.h"
-#include "vec3.h"
+#include "../ray.h"
+#include "../vec3.h"
 #include <memory>
 #include <vector>
 

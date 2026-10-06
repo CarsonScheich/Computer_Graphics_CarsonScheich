@@ -1,10 +1,10 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "vec3.h"
-#include "ray.h"
+#include "../vec3.h"
+#include "../ray.h"
 #include "Hittable.h"
-#include "Shader.h"
+#include "../Shader_Light/Shader.h"
 
 using std::make_shared;
 using std::shared_ptr;

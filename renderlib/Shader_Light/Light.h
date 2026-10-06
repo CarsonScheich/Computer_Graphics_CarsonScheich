@@ -1,7 +1,7 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "vec3.h"
+#include "../vec3.h"
 
 class Light {
     public:

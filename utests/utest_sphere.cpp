@@ -1,12 +1,12 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
-#include "Sphere.h"
+#include "Shapes/Sphere.h"
 #include "ray.h"
 #include "vec3.h"
-#include "Light.h"
-#include "Shader.h"
-#include "Lambertian_Shader.h"
+#include "Shader_Light/Light.h"
+#include "Shader_Light/Shader.h"
+#include "Shader_Light/Lambertian_Shader.h"
 
 TEST_CASE("RAY HITS SPHERE") {
     Light light(point3(5, 5, 0));

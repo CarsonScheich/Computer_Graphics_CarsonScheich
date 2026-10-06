@@ -1,19 +1,6 @@
-#include "ray.h"
-#include "vec3.h"
-#include "Sphere.h"
-#include "Hittable.h"
-#include "Framebuffer.h"
-#include "Shader.h"
-#include "PerspectiveCamera.h"
-#include "Triangle.h"
-#include "Hittable_list.h"
-#include "Light.h"
-#include "Lambertian_Shader.h"
-#include "BlinnPhong.h"
-
+#include "renderlib.h"
 
 #include <iostream>
-
 
     
 vec3 ray_color(const ray& r, const Shape& shape) {
@@ -51,30 +38,33 @@ Perspective camera(
     1.5                // focal length
 );
 
-Light light(point3(0, 2, -3));
+Light light(point3(5, 5, 0));
 
-auto redLambertian =
-    std::make_shared<BlinnPhong>(light, camera);
+    auto BlinnPhong_ptr =
+        std::make_shared<BlinnPhong>(light, camera);
+
+    auto Lambertian_ptr = 
+        std::make_shared<Lambertian>(light);
  
 
-            //auto sphere1 = std::make_shared<Sphere>(point3(0.0,0.0,-10.0),1.0,color(0,0,0));
+            auto sphere1 = std::make_shared<Sphere>(point3(0.0,0.0,-10.0),1.0,color(.5,.5,.5),Lambertian_ptr);
 
-            //auto triangle1 = std::make_shared<Triangle>(point3 (-1.2,-.2,-7),point3(.8,-.5,-5),point3 (.9,0,-5),color(1,0,0));
+            auto triangle1 = std::make_shared<Triangle>(point3 (-1.2,-.2,-7),point3(.8,-.5,-5),point3 (.9,0,-5),color(1,0,0),BlinnPhong_ptr);
 
-            //auto triangle2 = std::make_shared<Triangle>(point3(0.773205, -0.93923, -7),point3( 0.0330127, 0.94282, -5),point3(-0.45,0.779423,-5),color(0,1,0));
+            auto triangle2 = std::make_shared<Triangle>(point3(0.773205, -0.93923, -7),point3( 0.0330127, 0.94282, -5),point3(-0.45,0.779423,-5),color(0,1,0),Lambertian_ptr);
 
-            //auto triangle3 = std::make_shared<Triangle>(point3(0.426795,1.13923,-7),point3(-0.833013,-0.44282,-5),point3(-0.45,-0.779423,-5),color(0,0,1));
+            auto triangle3 = std::make_shared<Triangle>(point3(0.426795,1.13923,-7),point3(-0.833013,-0.44282,-5),point3(-0.45,-0.779423,-5),color(0,0,1),Lambertian_ptr);
 
 
             
-            auto spherelam = std::make_shared<Sphere>(point3(0, 0, -5), 1.0,color(1.0,0.0,0.0),redLambertian);
+            auto spherelam = std::make_shared<Sphere>(point3(5, 0, -10), 1.0,color(1.0,0.0,0.0),BlinnPhong_ptr);
 
             shape_list object;
             
-            //object.add(triangle1);
-            //object.add(triangle2);
-           // object.add(triangle3);
-            //object.add(sphere1);
+            object.add(triangle1);
+            object.add(triangle2);
+            object.add(triangle3);
+            object.add(sphere1);
             
            object.add(spherelam);
 

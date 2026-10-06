@@ -37,8 +37,7 @@ class Triangle : public Shape {
          }
 
         double t = -(f * (a*k - j*b) + e * (j*c - a*l)+ d * (b*l - k*c)) / M;
-        rec.p = r.at(t);
-        rec.t = t;
+
 
          if (t < t_min || t> t_max) {
             return false;
@@ -56,7 +55,9 @@ class Triangle : public Shape {
             return false;
          }
          rec.hit_color = Triangle_color;
-         //rec.hit_color = hit_color;
+         rec.p = r.at(t);
+         rec.t = t;
+         rec.shader = shader;
          return true;
 
     }

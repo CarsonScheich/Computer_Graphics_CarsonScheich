@@ -2,6 +2,7 @@
 #define LIGHT_H
 
 #include "../vec3.h"
+#include "../color.h"
 
 class Light {
     public:

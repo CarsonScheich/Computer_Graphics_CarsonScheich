@@ -1,9 +1,10 @@
 #include "renderlib.h"
 
+
 #include <iostream>
 
     
-vec3 ray_color(const ray& r, const Shape& shape) {
+color ray_color(const ray& r, const Shape& shape) {
 
     HitRecord rec;
 
@@ -11,13 +12,13 @@ vec3 ray_color(const ray& r, const Shape& shape) {
         if (rec.shader) {
             return rec.shader->raycolor(rec);
         }
-        return rec.hit_color;
+        return color::clamp_color(rec.hit_color);
     }
     return color(1.0, 1.0, 1.0);
 
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     // Image
 
     auto aspect_ratio = 1.0;
@@ -69,20 +70,25 @@ Light light(point3(5, 5, 0));
             
            object.add(spherelam);
 
-    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
 
     for (int j = 0; j < fb.getfbHeight(); j++) {
         std::clog << "\rScanlines remaining: " << (fb.getfbHeight() - j) << ' ' << std::flush;
         for (int i = 0; i < fb.getfbWidth(); i++) {
             ray r;
             camera.generateRay(i,j,r);
+            
             color pixel_color = ray_color(r,object);
-            //write_color(std::cout, pixel_color);
+            //color pixel_color(1.0, 1.0, 1.0);
+            
+           fb.setPixel(i ,j , pixel_color);
 
     }
 
-    //std::clog << "\rDone.                 \n";
-}
+    std::clog << "\rDone.             \n";
+    }
+
+    std::string output_name = (argc > 1) ? argv[1] : "render";
+    fb.exportAsPNG(output_name);
 }
 
 

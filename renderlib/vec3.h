@@ -91,30 +91,9 @@ inline vec3 operator/(const vec3& v, double t) {
         return v / v.length();
  }
 
- using color = vec3;
 
 
-//This is to make sure all colors before being output are between 0,1 so that we do not have a black color we do not expect
- inline color clamp_color(const color& c) {
-    return color(
-        std::clamp(c.x(), 0.0, 1.0),
-        std::clamp(c.y(), 0.0, 1.0),
-        std::clamp(c.z(), 0.0, 1.0)
-    );
-}
 
-//This writes out the 0-1 color into a png output of 0-256
- void write_color(std::ostream& out, const vec3& pixel_color) {
-    auto r = pixel_color.x();
-    auto g = pixel_color.y();
-    auto b = pixel_color.z();
-    // Translate the [0,1] component values to the byte range [0,255].
-    int rbyte = int(255.999 * r);
-    int gbyte = int(255.999 * g);
-    int bbyte = int(255.999 * b);
-    // Write out the pixel color components.
-    out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
-}
 
 
 #endif

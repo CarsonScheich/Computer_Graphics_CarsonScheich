@@ -2,6 +2,7 @@
 #define TRIANGLE_H
 
 #include "Hittable.h"
+#include "color.h"
 
 
 

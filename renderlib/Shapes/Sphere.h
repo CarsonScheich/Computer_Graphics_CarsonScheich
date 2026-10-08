@@ -4,6 +4,7 @@
 #include "../vec3.h"
 #include "../ray.h"
 #include "Hittable.h"
+#include "color.h"
 #include "../Shader_Light/Shader.h"
 
 using std::make_shared;

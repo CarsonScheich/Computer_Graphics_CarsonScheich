@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "../vec3.h"
 #include "Light.h"
+#include "../color.h"
 #include "../Cameras/PerspectiveCamera.h"
 #include <algorithm>
 
@@ -14,11 +15,11 @@ class BlinnPhong : public Shader{
     BlinnPhong(Light light, Perspective camera) : light(light), camera_position(camera.getposition()){};
 
     color raycolor(const HitRecord& rec) const override {
-        color albedo = rec.hit_color;
+        color albedo = color::clamp_color(rec.hit_color);
         vec3 light_dir = unit_vector(light.getPosition() - rec.p);
         double diffuse = std::max(0.0, dot(rec.normal,light_dir));
 
-        color labertianComponent = albedo * diffuse;
+        vec3 labertianComponent = albedo * diffuse;
 
         vec3 view_dir = unit_vector(camera_position - rec.p);
 
@@ -26,8 +27,8 @@ class BlinnPhong : public Shader{
         double specularComponent = std::pow(std::max(0.0, dot(rec.normal,halfway)),phongExp);
 
         //return albedo * diffuse + color(1.0,1.0,1.0) * (.2 *specular);
-        color shaded = labertianComponent + color(1.0,1.0,1.0) * specularComponent;
-        return clamp_color(shaded);
+        vec3 shaded = labertianComponent + color(1.0,1.0,1.0) * specularComponent;
+        return color::clamp_color(shaded);
 
     }
 

@@ -5,6 +5,7 @@
 #include <cmath>
 #include "../ray.h"
 #include "../vec3.h"
+#include "../color.h"
 #include <memory>
 #include <vector>
 
@@ -14,7 +15,7 @@ struct HitRecord {
     point3 p;
     vec3 normal;
     double t; //smaller means closer
-    color hit_color = color(.5,.5,.5);
+    vec3 hit_color = color(.5,.5,.5);
     std::shared_ptr<Shader> shader;
 };
 

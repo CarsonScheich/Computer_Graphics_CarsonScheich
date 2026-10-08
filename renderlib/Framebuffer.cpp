@@ -1,12 +1,9 @@
 #include "Framebuffer.h"
 #include "png++/png.hpp"
 
-Framebuffer::Framebuffer() : width(100), height(100){}
-
 
 void Framebuffer::clear(const vec3& color = vec3(0,0,0)) 
 {
-    
     fb.resize(width and height);
     for (int i=0; i < fb.size() ; ++i)
     {
@@ -14,9 +11,9 @@ void Framebuffer::clear(const vec3& color = vec3(0,0,0))
     }
 }
 
-int Framebuffer::getWidth() const { return width;}
+int Framebuffer::getfbWidth()  { return width; }
 
-int Framebuffer::getHeight() const { return height;}
+int Framebuffer::getfbHeight()  { return height; } 
 
 void Framebuffer::setPixel( int i, int j, const vec3& c) 
 {

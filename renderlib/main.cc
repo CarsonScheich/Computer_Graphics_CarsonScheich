@@ -25,6 +25,7 @@ int main() {
     // Calculate the image height, and ensure that it's at least 1.
     int image_height = int(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
+    Framebuffer fb(image_height , image_width);
 
     // Camera
 
@@ -70,22 +71,19 @@ Light light(point3(5, 5, 0));
 
     std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
 
-    for (int j = 0; j < image_height; j++) {
-        std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
-        for (int i = 0; i < image_width; i++) {
+    for (int j = 0; j < fb.getfbHeight(); j++) {
+        std::clog << "\rScanlines remaining: " << (fb.getfbHeight() - j) << ' ' << std::flush;
+        for (int i = 0; i < fb.getfbWidth(); i++) {
             ray r;
             camera.generateRay(i,j,r);
             color pixel_color = ray_color(r,object);
-            write_color(std::cout, pixel_color);
+            //write_color(std::cout, pixel_color);
 
     }
 
     //std::clog << "\rDone.                 \n";
 }
 }
-
-
-
 
 
 /*

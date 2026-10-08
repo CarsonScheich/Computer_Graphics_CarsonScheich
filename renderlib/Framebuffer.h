@@ -4,15 +4,16 @@
 
 class Framebuffer {
     public:
-    Framebuffer() : width(100), height(100) {
-        fb.resize( width * height );
-    }
+    Framebuffer(int height, int width) : width(width), height(height) {
+         fb.resize( width * height );
+        };
 
-    int getWidth() const;
+    int getfbWidth() ;
+   
 
-    int getHeight() const;
+    int getfbHeight() ;
 
-    void clear(const vec3& color = vec3(0,0,0));
+    void clear(const vec3& color);
 
 
     void setPixel( int i, int j, const vec3& c);

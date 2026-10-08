@@ -116,4 +116,16 @@ add_subdirectory(OpenGL)
 enable_testing()
 add_subdirectory(utests)
 
-add_executable(raytracer renderlib/main.cc)
+add_executable(raytracer 
+renderlib/main.cc
+renderlib/Framebuffer.cpp
+ )
+target_include_directories(raytracer PRIVATE
+    /opt/homebrew/Cellar/png++/0.2.10/include
+)
+target_include_directories(raytracer PRIVATE
+    /opt/homebrew/Cellar/png++/0.2.10/include
+    /opt/homebrew/Cellar/libpng/1.6.58/include
+)
+
+target_link_libraries(raytracer PRIVATE PNG::PNG)

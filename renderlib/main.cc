@@ -3,26 +3,39 @@
 
 #include <iostream>
 
-    
-color ray_color(const ray& r, const Shape& shape) {
 
+color ray_color(const ray& r, const shape_list& shape, int depth) {
+    if (depth <= 0)
+        return color(0, 0, 0);
+        
     HitRecord rec;
 
     if (shape.hit(0.001, 1000.0, r, rec)) {
-        if (rec.shader) {
-            return rec.shader->raycolor(rec);
+        ray reflected;
+
+        if (rec.shader->reflectedRay(r, rec, reflected)) {
+            return ray_color(reflected, shape, depth - 1);
         }
-        return color::clamp_color(rec.hit_color);
+        return rec.shader->raycolor(rec);
+
     }
-    return color(1.0, 1.0, 1.0);
+    vec3 unit_direction = unit_vector(r.direction());
+    double t = 0.5 * (unit_direction.y() + 1.0);
+    return color(
+        (1.0 - t) * 0.01 + t * 0.35,  // Red
+        (1.0 - t) * 0.01 + t * 0.10,  // Green
+        (1.0 - t) * 0.08 + t * 0.85   // Blue
+);
 
 }
+
+
 
 int main(int argc, char* argv[]) {
     // Image
 
     auto aspect_ratio = 1.0;
-    int image_width = 200;
+    int image_width = 800;
     // Calculate the image height, and ensure that it's at least 1.
     int image_height = int(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
@@ -47,9 +60,12 @@ Light light(point3(5, 5, 0));
 
     auto Lambertian_ptr = 
         std::make_shared<Lambertian>(light);
+
+     auto mirror_ptr = 
+        std::make_shared<Mirror>();   
  
 
-            auto sphere1 = std::make_shared<Sphere>(point3(0.0,0.0,-10.0),1.0,color(.5,.5,.5),Lambertian_ptr);
+            auto sphere1 = std::make_shared<Sphere>(point3(0.0,0.0,-10.0),1.0,color(1,.0,.0),Lambertian_ptr);
 
             auto triangle1 = std::make_shared<Triangle>(point3 (-1.2,-.2,-7),point3(.8,-.5,-5),point3 (.9,0,-5),color(1,0,0),BlinnPhong_ptr);
 
@@ -59,7 +75,7 @@ Light light(point3(5, 5, 0));
 
 
             
-            auto spherelam = std::make_shared<Sphere>(point3(5, 0, -10), 1.0,color(1.0,0.0,0.0),BlinnPhong_ptr);
+            auto spherelam = std::make_shared<Sphere>(point3(2, 0, -7), 1.5,color(1.0,1.0,1.0),mirror_ptr);
 
             shape_list object;
             
@@ -70,22 +86,32 @@ Light light(point3(5, 5, 0));
             
            object.add(spherelam);
 
+           int rpp_NSquare = 4;
+           int max_depth = 15;
 
-    for (int j = 0; j < fb.getfbHeight(); j++) {
-        std::clog << "\rScanlines remaining: " << (fb.getfbHeight() - j) << ' ' << std::flush;
-        for (int i = 0; i < fb.getfbWidth(); i++) {
-            ray r;
-            camera.generateRay(i,j,r);
-            
-            color pixel_color = ray_color(r,object);
-            //color pixel_color(1.0, 1.0, 1.0);
-            
-           fb.setPixel(i ,j , pixel_color);
+           for (int j=0; j<fb.getfbWidth(); ++j){
+            for (int i=0; i<fb.getfbHeight(); ++i){
+                color c(0.0,0.0,0.0);
 
-    }
+                for (int p=0; p<rpp_NSquare; ++p){
+                    for (int q=0; q<rpp_NSquare; ++q){
 
-    std::clog << "\rDone.             \n";
-    }
+                        float tmin = 1.0;
+                        float tmax = std::numeric_limits<float>::infinity();
+
+                        float pOffset = (p + randomOffset())/rpp_NSquare;
+                        float qOffset = (q + randomOffset())/rpp_NSquare;
+
+                        ray r = camera.generateRay(i + pOffset, j + qOffset);
+                        
+                        c += ray_color(r, object,max_depth);
+                    }
+                }
+                c *= (1.0 / (rpp_NSquare * rpp_NSquare));
+                fb.setPixel(i,j, color::clamp_color(c));
+            }
+        }
+
 
     std::string output_name = (argc > 1) ? argv[1] : "render";
     fb.exportAsPNG(output_name);

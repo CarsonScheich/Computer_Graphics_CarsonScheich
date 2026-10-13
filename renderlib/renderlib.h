@@ -4,6 +4,7 @@
 #include "vec3.h"
 #include "Framebuffer.h"
 #include "color.h"
+#include "randomOffset.h"
 
 #include "Shapes/Sphere.h"
 #include "Shapes/Hittable.h"

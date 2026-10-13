@@ -18,6 +18,7 @@ void color::write_color(std::ostream& out, const vec3& pixel_color) {
     out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
 }
 
+
     color color::clamp_color(const vec3& c) {
         return color(
         std::clamp(c.x(), 0.0, 1.0),

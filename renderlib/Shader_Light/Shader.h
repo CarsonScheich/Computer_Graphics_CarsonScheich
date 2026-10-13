@@ -12,6 +12,11 @@ class Shader {
         return color::clamp_color(.5 * (rec.normal + vec3(1.0, 1.0, 1.0)));
     }
 
+    virtual bool reflectedRay(
+    const ray& incoming, const HitRecord& rec, ray& reflected) const {
+    return false;
+}
+
 
 };
 

@@ -24,7 +24,7 @@ class Perspective : public Camera {
         focalLength = focal;
     };
 
-    void generateRay(int i, int j, ray& r) override;
+    ray generateRay(double i, double j) override;
 
     point3 getposition();
 

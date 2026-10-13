@@ -1,7 +1,7 @@
 #include "PerspectiveCamera.h"
 
 
-void Perspective::generateRay( int i, int j, ray &r ) {
+ray Perspective::generateRay(double i, double j) {
         vec3 forward = viewDirection / viewDirection.length();
 
         vec3 world_up(0, 1, 0);
@@ -33,8 +33,10 @@ void Perspective::generateRay( int i, int j, ray &r ) {
          + (j * pixel_delta_v);
 
         vec3 ray_direction = pixel_center - origin;
+        
 
-        r = ray(origin, ray_direction);
+        ray r = ray(origin, ray_direction);
+        return r;
     }
 
     point3 Perspective::getposition() {

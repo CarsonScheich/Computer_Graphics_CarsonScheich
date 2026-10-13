@@ -13,7 +13,7 @@ class Camera{
     int samples_per_pixel = 10;
     //int max_depth = 10;
 
-    virtual void generateRay(int i, int j,ray &r) = 0;
+    virtual ray generateRay(double i, double j) = 0;
 
     virtual ~Camera() = default;
 

@@ -9,6 +9,7 @@ vec3.h
 renderlib.h 
 color.h
 color.cpp
+randomOffset.h
 )
 target_include_directories(renderlib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}

@@ -4,6 +4,7 @@
 
 struct Point_light
 {
-    /* data */
-    
+    point3 positions;
+    color intensity = color(1,1,1);
+
 };

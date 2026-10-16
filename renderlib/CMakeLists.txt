@@ -10,7 +10,11 @@ renderlib.h
 color.h
 color.cpp
 randomOffset.h
+Scene.h 
+Scene.cpp 
+randomOffset.h
 )
+
 target_include_directories(renderlib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     )
@@ -26,16 +30,18 @@ target_include_directories(Shapes INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
-add_library(Shader_Light INTERFACE
+add_library(Shader_Light STATIC
 Shader_Light/BlinnPhong.h 
 Shader_Light/Lambertian_Shader.h
 Shader_Light/Light.h 
 Shader_Light/Mirror.h 
 Shader_Light/Point_light.h 
 Shader_Light/Shader.h 
+Shader_Light/Normal.h 
+Shader_Light/Normal.cpp
 )
 
-target_include_directories(Shader_Light INTERFACE 
+target_include_directories(Shader_Light PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}
     )   
 

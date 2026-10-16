@@ -5,28 +5,25 @@
 #include "Light.h"
 #include "../vec3.h"
 #include "../color.h"
-#include "../Shapes/Hittable.h"
-#include "../Shapes/Hittable_list.h"
+#include <algorithm>
 
 
 
 class Lambertian : public Shader {
     public:
-    Lambertian(Light light) : light(light) {
-        }
+    Lambertian() = default;
 
-     color raycolor(const HitRecord& rec) const override {
+    color raycolor(const HitRecord& rec, const Light& light) const override {
+        vec3 light_dir = unit_vector(light.getPosition() - rec.p);
+        float diffuse = std::max(0.0, dot(rec.normal, light_dir));
 
-    vec3 light_dir =
-        unit_vector(light.getPosition() - rec.p);
-    double diffuse =
-        std::max(0.0, dot(rec.normal, light_dir));
-    return color::clamp_color(rec.hit_color * diffuse);
+        color result = rec.hit_color * light.getIntensity() * diffuse;
 
+        return color::clamp_color(result);
 }
 
     private:   
-        Light light;
+        std::vector<std::shared_ptr<Light>> lights;
 
     };
 

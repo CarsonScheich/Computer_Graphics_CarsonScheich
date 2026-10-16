@@ -103,9 +103,10 @@ target_link_libraries(renderlib PUBLIC
 add_executable(raytracer
     renderlib/main.cc
 )
-
+find_package(OpenMP REQUIRED)
 # Link all libraries to the executable
 target_link_libraries(raytracer PRIVATE
+    OpenMP::OpenMP_CXX
     renderlib
     Shapes
     Shader_Light

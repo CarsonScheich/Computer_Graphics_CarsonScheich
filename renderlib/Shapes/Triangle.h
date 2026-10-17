@@ -29,7 +29,6 @@ class Triangle : public Shape {
         double k = alpha.y() - r.origin().y();
         double l = alpha.z() - r.origin().z();
 
-        rec.normal = unit_vector(cross(beta - alpha, gamma - alpha));
 
         double M = a * (e*i - h*f) + b* (g*f - d*i) + c * (d*h - e*g);
         // deviding by 0 is undefined and this case can be thrown out
@@ -55,6 +54,8 @@ class Triangle : public Shape {
          if (beta_val < 0 || beta_val > 1 - gamma_val) {
             return false;
          }
+         
+         rec.normal = unit_vector(cross(beta - alpha, gamma - alpha));
          rec.hit_color = Triangle_color;
          rec.p = r.at(t);
          rec.t = t;

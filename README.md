@@ -18,7 +18,12 @@ cd buildVCPkg
 cmake --build . or make
 ```
 
-./raytracer > something.png
+to run the current only program we can use
+./raytracer > something
+
+
+if you want to run parralel we can use:
+OMP_NUM_THREADS=10 ./buildOpenMP/raytracer > something
 
 Your executables will then be in the build folder. They may be in sub-folders depending on the environment.
 

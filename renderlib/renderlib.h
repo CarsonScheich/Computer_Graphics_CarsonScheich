@@ -13,6 +13,8 @@
 #include "Shapes/Hittable.h"
 #include "Shapes/Hittable_list.h"
 #include "Shapes/Triangle.h"
+#include "Shapes/Rectangle.h"
+#include "Shapes/Box.h"
 
 #include "Shader_Light/BlinnPhong.h"
 #include "Shader_Light/Lambertian_Shader.h"

@@ -158,6 +158,14 @@ auto PurpleSphere = std::make_shared<Sphere>(
     Lambertian_ptr
 );
 
+auto box = std::make_shared<Box>(
+    point3(-3.5, 0.0, -4.0),  // Minimum corner
+    point3(-1.5, 1.0, -3.0),  // Maximum corner
+    color(.2, .5, .9),
+    Lambertian_ptr
+
+);
+
 /*
 // CENTER MIRROR SPHERE
 auto mirrorBall = std::make_shared<Sphere>(
@@ -241,7 +249,7 @@ scene.addObject(FrontMirrorPShere);
 scene.addObject(diffuse);
 scene.addObject(orangeSphere);
 scene.addObject(PurpleSphere);
-
+scene.addObject(box);
 
 
 

@@ -24,6 +24,8 @@ Shapes/Hittable.h
 Shapes/Hittable_list.h 
 Shapes/Sphere.h 
 Shapes/Triangle.h 
+Shapes/Rectangle.h
+Shapes/Box.h 
 )
 
 target_include_directories(Shapes INTERFACE 

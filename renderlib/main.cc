@@ -13,13 +13,13 @@ int main(int argc, char* argv[]) {
     // Camera
 
 Perspective camera(
-    point3(0, 3, 3),   // camera position
-    vec3(0, -0.4, -1),    // view direction
-    .5,               // image plane width
-    .5,               // image plane height
+    point3(4, 3, 1),   // camera position
+    vec3(-4, -2, -4),    // view direction
+    1.5,               // image plane width
+    1.5,               // image plane height
     image_width,
     image_height,
-    .4                // focal length
+    2                // focal length
 );
 
 Scene scene;
@@ -27,7 +27,7 @@ Scene scene;
 auto light1 = std::make_shared<Light>(point3(-5,8,5),color(.7,.6,.45));
 scene.addLight(light1);
 
-auto light2 = std::make_shared<Light>(point3(6,6,2),color(.35,.45,.7));
+auto light2 = std::make_shared<Light>(point3(6, 7, 1),color(0.8, 0.8, 0.8));
 scene.addLight(light2);
 
     auto BlinnPhong_ptr64 =
@@ -52,119 +52,75 @@ scene.addLight(light2);
 // SCENE SETUP
 // ==========================================
 
-auto floor1 = std::make_shared<Triangle>(
-    point3(-50, 0, 50),
-    point3(50, 0 , 50),
-    point3(50, 0, -50),
-    color(.6, .6, .6),
+
+scene.addObject(std::make_shared<Box>(
+    point3(-1, 0, -4),
+    point3(1, 2, -2),
+    color(1, 0.7, 0.1),
     Lambertian_ptr
-);
+));
+//left
+color white(1, 1, 1);
 
-auto floor2 = std::make_shared<Triangle>(
-    point3(-50, 0, 50),
-    point3(50, 0 , -50),
-    point3(-50, 0, -50),
-    color(.6, .6, .6),
-    Lambertian_ptr
-);
+scene.addObject(std::make_shared<Box>(
+    point3(-0.5, 1.45, -2),
+    point3(0.5, 1.65, -1.9),
+    white, Lambertian_ptr
+));
 
-auto wall1 = std::make_shared<Triangle>(
-    point3(-4, 0, -6),
-    point3(4, 0, -6),
-    point3(4, 4, -6),
-    color(1, 1, 1),
-    mirror_ptr
-);
+scene.addObject(std::make_shared<Box>(
+    point3(0.3, 1.05, -2),
+    point3(0.5, 1.5, -1.9),
+    white, Lambertian_ptr
+));
 
-auto wall2 = std::make_shared<Triangle>(
-    point3(-4, 0, -6),
-    point3(4, 4, -6),
-    point3(-4, 4, -6),
-    color(1, 1, 1),
-    mirror_ptr
-);
+scene.addObject(std::make_shared<Box>(
+    point3(-0.1, 1.0, -2),
+    point3(0.5, 1.2, -1.9),
+    white, Lambertian_ptr
+));
 
-auto floatingtri = std::make_shared<Triangle>(
-    point3(0.9, 1.4, -0.6),
-    point3(1.9, 1.4, -0.6),
-    point3(1.4, 2.2, -1.1),
-    color(.9, .8, .1),
-    Lambertian_ptr
-);
+scene.addObject(std::make_shared<Box>(
+    point3(-0.1, 0.65, -2),
+    point3(0.1, 1.1, -1.9),
+    white, Lambertian_ptr
+));
 
-auto GreenSphere = std::make_shared<Sphere>(
-    point3(-2, 0.8, -3),
-    .8,
-    color(.2, .8, .2),
-    Lambertian_ptr
-);
+scene.addObject(std::make_shared<Box>(
+    point3(-0.1, 0.3, -2),
+    point3(0.1, 0.5, -1.9),
+    white, Lambertian_ptr
+));
+//right
+scene.addObject(std::make_shared<Box>(
+    point3(1, 1.45, -3.5),
+    point3(1.1, 1.65, -2.5),
+    white, Lambertian_ptr
+));
 
-auto RedSphere =std::make_shared<Sphere>(
-    point3(-1.1, 0.6, -1.2),
-    .6,
-    color(.8, .1, .1),
-    BlinnPhong_ptr64
-);
+scene.addObject(std::make_shared<Box>(
+    point3(1, 1.05, -3.5),
+    point3(1.1, 1.5, -3.3),
+    white, Lambertian_ptr
+));
 
-auto normal = std::make_shared<Sphere>(
-    point3(0, 0.9, -3.5),
-    .9,
-    color(0,0,0),
-    normal_ptr
-);
+scene.addObject(std::make_shared<Box>(
+    point3(1, 1.0, -3.5),
+    point3(1.1, 1.2, -2.9),
+    white, Lambertian_ptr
+));
 
-auto BlueSphere = std::make_shared<Sphere>(
-    point3(0.3, 0.45, -1.6),
-    .45,
-    color(.1, .2, .8),
-    BlinnPhong_ptr16
-);
+scene.addObject(std::make_shared<Box>(
+    point3(1, 0.65, -3.1),
+    point3(1.1, 1.1, -2.9),
+    white, Lambertian_ptr
+));
 
-
-auto mirrorSphere = std::make_shared<Sphere>(
-    point3(2, 1, -3),
-    1,
-    color(1,1,1),
-    mirror_ptr
-);
-
-auto FrontMirrorPShere = std::make_shared<Sphere>(
-    point3(1.5, 0.5, 0.3),
-    .5,
-    color(1,1,1),
-    mirror_ptr
-);
-
-auto diffuse = std::make_shared<Sphere>(
-    point3(-1.3, 0.45, 0.4),
-    .45,
-    color(.2, .7, .7),
-    Lambertian_ptr
-);
-
-//BEHIND CAMERA
-
-auto orangeSphere = std::make_shared<Sphere>(
-    point3(0.3, 1, 5),
-    1,    
-    color(.95, .5, .1),
-    BlinnPhong_ptr32
-);
-
-auto PurpleSphere = std::make_shared<Sphere>(
-    point3(2.4, 0.8, 4.8),
-    .8,
-    color(.6, .2, .8),
-    Lambertian_ptr
-);
-
-auto box = std::make_shared<Box>(
-    point3(-3.5, 0.0, -4.0),  // Minimum corner
-    point3(-1.5, 1.0, -3.0),  // Maximum corner
-    color(.2, .5, .9),
-    Lambertian_ptr
-
-);
+scene.addObject(std::make_shared<Box>(
+    point3(1, 0.3, -3.1),
+    point3(1.1, 0.5, -2.9),
+    white, Lambertian_ptr
+));
 
 /*
 // CENTER MIRROR SPHERE
@@ -234,25 +190,6 @@ scene.addObject(mirrorBall);
 
 */
 
-
-scene.addObject(floor1);
-scene.addObject(floor2);
-scene.addObject(wall1);
-scene.addObject(wall2);
-scene.addObject(floatingtri);
-scene.addObject(GreenSphere);
-scene.addObject(RedSphere);
-scene.addObject(normal);
-scene.addObject(BlueSphere);
-scene.addObject(mirrorSphere);
-scene.addObject(FrontMirrorPShere);
-scene.addObject(diffuse);
-scene.addObject(orangeSphere);
-scene.addObject(PurpleSphere);
-scene.addObject(box);
-
-
-
            int rpp_NSquare = 10;
            int max_depth = 5;
 
@@ -287,6 +224,47 @@ scene.addObject(box);
 
 
 /*
+
+
+
+
+
+color white(1, 1, 1);
+
+// Top
+scene.addObject(std::make_shared<Box>(
+    point3(-0.5, 1.45, -2),
+    point3(0.5, 1.65, -1.9),
+    white, Lambertian_ptr
+));
+
+// Right side
+scene.addObject(std::make_shared<Box>(
+    point3(0.3, 1.05, -2),
+    point3(0.5, 1.5, -1.9),
+    white, Lambertian_ptr
+));
+
+// Middle
+scene.addObject(std::make_shared<Box>(
+    point3(-0.1, 1.0, -2),
+    point3(0.5, 1.2, -1.9),
+    white, Lambertian_ptr
+));
+
+// Stem
+scene.addObject(std::make_shared<Box>(
+    point3(-0.1, 0.65, -2),
+    point3(0.1, 1.1, -1.9),
+    white, Lambertian_ptr
+));
+
+// Bottom dot
+scene.addObject(std::make_shared<Box>(
+    point3(-0.1, 0.3, -2),
+    point3(0.1, 0.5, -1.9),
+    white, Lambertian_ptr
+));
 
 
 

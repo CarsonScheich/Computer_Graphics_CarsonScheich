@@ -19,6 +19,19 @@ target_include_directories(renderlib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
+
+add_library(JSON STATIC
+JSON/ISceneLoader.h 
+JSON/SceneLoader.h 
+JSON/SceneParser_JSON.h 
+JSON/SceneParser_JSON.cpp 
+)
+
+target_include_directories(JSON PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )   
+
+
 add_library(Shapes INTERFACE
 Shapes/Hittable.h 
 Shapes/Hittable_list.h 

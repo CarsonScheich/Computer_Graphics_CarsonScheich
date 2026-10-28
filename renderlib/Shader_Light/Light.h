@@ -6,6 +6,8 @@
 
 class Light {
     public:
+    Light ();
+    
     Light(const point3& position, const color& intensity = color(1,1,1))
     : position(position) , intensity(intensity){}
 

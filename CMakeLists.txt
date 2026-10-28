@@ -52,6 +52,7 @@ if(NOT PNG_FOUND)
   message(STATUS "Could not find the PNG Libraries!")
 endif(NOT PNG_FOUND)
 
+
 Include(FetchContent)
 
 # Catch2
@@ -103,7 +104,23 @@ target_link_libraries(renderlib PUBLIC
 add_executable(raytracer
     renderlib/main.cc
 )
+add_executable(jsonTest 
+    renderlib/mainJSON.cc)
+
 find_package(OpenMP REQUIRED)
+
+target_link_libraries(jsonTest PRIVATE
+    JSON
+    renderlib
+    Shapes
+    Shader_Light
+    Cameras
+)
+find_package(nlohmann_json CONFIG REQUIRED)
+target_link_libraries(JSON PUBLIC
+    nlohmann_json::nlohmann_json
+)
+
 # Link all libraries to the executable
 target_link_libraries(raytracer PRIVATE
     OpenMP::OpenMP_CXX
@@ -129,6 +146,13 @@ add_subdirectory(examples)
 #
 add_subdirectory(OpenGL)
 # add_subdirectory(Vulkan)
+
+
+
+# This is for JSON files
+
+
+
 
 #
 # Unit Tests - by enabling testing with cmake, we can create a target that lets unit tests be run. After re-building

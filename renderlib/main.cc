@@ -1,6 +1,8 @@
 #include "renderlib.h"
 
+
 int main(int argc, char* argv[]) {
+
     // Image
 
     auto aspect_ratio = 1.0;

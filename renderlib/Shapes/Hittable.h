@@ -17,6 +17,7 @@ struct HitRecord {
     double t; //smaller means closer
     color hit_color = color(.5,.5,.5);
     std::shared_ptr<Shader> shader;
+    bool front_face;
 };
 
 using std::make_shared;

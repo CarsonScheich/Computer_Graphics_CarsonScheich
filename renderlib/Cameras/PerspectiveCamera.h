@@ -6,6 +6,8 @@
 class Perspective : public Camera {
     public:
 
+    Perspective();
+
     Perspective(
         const point3& orig,
         const vec3& viewDirec,

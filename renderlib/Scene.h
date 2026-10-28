@@ -15,6 +15,14 @@ class Scene {
     const shape_list& getObjects() const {
         return shapes;
     }
+    
+    void addCameras(std::shared_ptr<Camera> cam){
+        cameras.push_back(cam);
+    }
+
+    const std::shared_ptr<Camera> getCamera(int x){
+        return cameras[x];
+    } 
 
     const std::vector<std::shared_ptr<Light>>& getLights() {
         return lights;
@@ -29,5 +37,7 @@ class Scene {
     private:
     shape_list shapes;
     std::vector<std::shared_ptr<Light>> lights;
+    std::vector<std::shared_ptr<Camera>> cameras;
+    
 
 };

@@ -1,0 +1,75 @@
+
+
+
+add_library(renderlib STATIC
+Framebuffer.h 
+Framebuffer.cpp
+ray.h 
+vec3.h 
+renderlib.h 
+color.h
+color.cpp
+randomOffset.h
+Scene.h 
+Scene.cpp 
+randomOffset.h
+BVH.h 
+BVH.cpp 
+AABB.h 
+)
+
+target_include_directories(renderlib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+
+add_library(JSON STATIC
+JSON/ISceneLoader.h 
+JSON/SceneLoader.h 
+JSON/SceneParser_JSON.h 
+JSON/SceneParser_JSON.cpp 
+)
+
+target_include_directories(JSON PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )   
+
+
+add_library(Shapes INTERFACE
+Shapes/Hittable.h 
+Shapes/Hittable_list.h 
+Shapes/Sphere.h 
+Shapes/Triangle.h 
+Shapes/Rectangle.h
+Shapes/Box.h 
+)
+
+target_include_directories(Shapes INTERFACE 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+add_library(Shader_Light STATIC
+Shader_Light/BlinnPhong.h 
+Shader_Light/Lambertian_Shader.h
+Shader_Light/Light.h 
+Shader_Light/Mirror.h 
+Shader_Light/Point_light.h 
+Shader_Light/Shader.h 
+Shader_Light/Normal.h 
+Shader_Light/Normal.cpp
+)
+
+target_include_directories(Shader_Light PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )   
+
+
+add_library(Cameras STATIC 
+Cameras/camera.h 
+Cameras/PerspectiveCamera.h 
+Cameras/PerspectiveCamera.cpp 
+)
+
+target_include_directories(Cameras PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )

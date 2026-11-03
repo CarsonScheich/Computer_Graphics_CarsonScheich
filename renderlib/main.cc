@@ -1,4 +1,5 @@
 #include "renderlib.h"
+#include <chrono>
 
 
 int main(int argc, char* argv[]) {
@@ -6,7 +7,7 @@ int main(int argc, char* argv[]) {
     // Image
 
     auto aspect_ratio = 1.0;
-    int image_width = 500;
+    int image_width = 1000;
     // Calculate the image height, and ensure that it's at least 1.
     int image_height = int(image_width / aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
@@ -123,7 +124,15 @@ scene.addObject(std::make_shared<Box>(
     point3(1.1, 0.5, -2.9),
     white, Lambertian_ptr
 ));
+auto bvhStart = std::chrono::steady_clock::now();
 
+scene.buildBVH();
+
+auto bvhEnd = std::chrono::steady_clock::now();
+
+std::cerr << "BVH build time: "
+          << std::chrono::duration<double>(bvhEnd - bvhStart).count()
+          << " seconds\n";
 /*
 // CENTER MIRROR SPHERE
 auto mirrorBall = std::make_shared<Sphere>(
@@ -191,6 +200,7 @@ scene.addObject(goldBall);
 scene.addObject(mirrorBall);
 
 */
+auto renderStart = std::chrono::steady_clock::now();
 
            int rpp_NSquare = 10;
            int max_depth = 5;
@@ -221,15 +231,16 @@ scene.addObject(mirrorBall);
 
 
     std::string output_name = (argc > 1) ? argv[1] : "render";
+        auto renderEnd = std::chrono::steady_clock::now();
+
+    std::cerr << "Render time: "
+    << std::chrono::duration<double>(renderEnd - renderStart).count() << " seconds\n";
     fb.exportAsPNG(output_name);
+
 }
 
 
 /*
-
-
-
-
 
 color white(1, 1, 1);
 

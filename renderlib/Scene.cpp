@@ -3,7 +3,8 @@
 bool Scene::isInShadow(const ray& shadowRay, const shape_list& shapes) {
     HitRecord shadowRec;
 
-    return shapes.hit(0.001, 0.999, shadowRay, shadowRec);
+    return bvh ? bvh->hit(0.001, 0.999, shadowRay, shadowRec)
+               : shapes.hit(0.001, 0.999, shadowRay, shadowRec);
 }
 
 
@@ -14,7 +15,7 @@ color Scene::ray_color(const ray& r, int depth) {
 
     HitRecord rec;
 
-    if (shapes.hit(0.001, 1000.0, r, rec)) {
+   if (bvh ? bvh->hit(0.001, 1000.0, r, rec) : shapes.hit(0.001, 1000.0, r, rec)) {
         ray reflected;
         if (rec.shader->reflectedRay(r, rec, reflected)) {
             return ray_color(reflected, depth - 1);

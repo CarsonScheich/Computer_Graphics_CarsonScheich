@@ -6,10 +6,17 @@ class Scene {
     public:
     void addObject(std::shared_ptr<Shape> shape) {
         shapes.add(shape);
+        bvh.reset();
     }
 
     void addLight(std::shared_ptr<Light> light){
         lights.push_back(light);
+    }
+
+    void buildBVH() {
+    if (!shapes.objects.empty()) {
+        bvh = std::make_shared<BVHNode>(shapes.objects, 0);
+        }
     }
 
     const shape_list& getObjects() const {
@@ -36,6 +43,7 @@ class Scene {
 
     private:
     shape_list shapes;
+    std::shared_ptr<BVHNode> bvh;
     std::vector<std::shared_ptr<Light>> lights;
     std::vector<std::shared_ptr<Camera>> cameras;
     

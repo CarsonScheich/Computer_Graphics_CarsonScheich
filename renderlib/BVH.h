@@ -21,7 +21,7 @@ public:
 
     bool hit(double tmin, double tmax, const ray& r, HitRecord& rec) const override;
 
-    // Return the node's bounding box
+    
     AABB bounding_box() const override {
         return bbox;
     }

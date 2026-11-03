@@ -19,21 +19,24 @@ cmake --build . or make
 ```
 
 to run the current only program we can use
+```
 ./raytracer > something
+```
 
 for reading in a JSON right now we have another main that can be run
+```
  ./jsonTest > something
+ ```
 
  To run any of this with OpenMp we can use 
+ ```
  OMP_NUM_THREADS=(Number of cores) ./buildOpenMP/raytracer > something
+ ```
  my computer has 8 cores I choose to use for this render
 
  BVH can be used for by doing. scene.buildBVH();
  Commenting this out will still allow the program to run
 
-
-if you want to run parralel we can use:
-OMP_NUM_THREADS=10 ./buildOpenMP/raytracer > something
 
 Your executables will then be in the build folder. They may be in sub-folders depending on the environment.
 

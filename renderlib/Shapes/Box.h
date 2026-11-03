@@ -4,10 +4,12 @@
 #include "Hittable.h"
 #include "Triangle.h"
 #include "Rectangle.h"
+#include "../BVH.h"
+#include "../AABB.h"
 
 class Box : public Shape {
     public:
-    Box(const point3& minCorner, const point3& maxCorner, color col, std::shared_ptr<Shader> shade){
+    Box(const point3& minCorner, const point3& maxCorner, color col, std::shared_ptr<Shader> shade) : bbox(minCorner, maxCorner) {
             double x0 = minCorner.x();
             double y0 = minCorner.y();
             double z0 = minCorner.z();
@@ -17,16 +19,15 @@ class Box : public Shape {
             double z1 = maxCorner.z();
 
             faces.emplace_back(point3(x0,y0,z1), point3(x1,y0,z1), point3(x0,y1,z1),point3(x1,y1,z1),col,shade);
-
             faces.emplace_back(point3(x1,y0,z0), point3(x0,y0,z0), point3(x1,y1,z0),point3(x0,y1,z0),col,shade);
-
             faces.emplace_back(point3(x0,y0,z0), point3(x0,y0,z1), point3(x0,y1,z0),point3(x0,y1,z1),col,shade);
-
             faces.emplace_back(point3(x1,y0,z1), point3(x1,y0,z0), point3(x1,y1,z1),point3(x1,y1,z0),col,shade);
-
             faces.emplace_back(point3(x0,y1,z1), point3(x1,y1,z1), point3(x0,y1,z0),point3(x1,y1,z0),col,shade);
-
             faces.emplace_back(point3(x0,y0,z0), point3(x1,y0,z0), point3(x0,y0,z1),point3(x1,y0,z1),col,shade);
+    }
+
+    AABB bounding_box() const override {
+    return bbox;
     }
 
     bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const override {
@@ -44,6 +45,7 @@ class Box : public Shape {
 
     private:
         std::vector<Rectangle> faces;
+        AABB bbox;
 
 };
 

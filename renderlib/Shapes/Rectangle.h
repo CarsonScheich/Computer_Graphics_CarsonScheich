@@ -3,6 +3,8 @@
 
 #include "Hittable.h"
 #include "Triangle.h"
+#include "../BVH.h"
+#include "../AABB.h"
 #include "color.h"
 #include <vector>
 
@@ -16,6 +18,24 @@ class Rectangle: public Shape{
         List_tringles.emplace_back(bottomRight, topRight, topLeft, col, shade);
         
     }
+
+    AABB bounding_box() const override {
+    AABB a = List_tringles[0].bounding_box();
+    AABB b = List_tringles[1].bounding_box();
+
+    point3 minimum(
+        std::min(a.minimum.x(), b.minimum.x()),
+        std::min(a.minimum.y(), b.minimum.y()),
+        std::min(a.minimum.z(), b.minimum.z())
+    );
+    point3 maximum(
+        std::max(a.maximum.x(), b.maximum.x()),
+        std::max(a.maximum.y(), b.maximum.y()),
+        std::max(a.maximum.z(), b.maximum.z())
+    );
+    return AABB(minimum, maximum);
+    }
+    
 
     bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const override {
         bool hitAnything = false;

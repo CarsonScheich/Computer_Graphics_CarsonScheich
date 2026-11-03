@@ -21,6 +21,9 @@ cmake --build . or make
 to run the current only program we can use
 ./raytracer > something
 
+for reading in a JSON right now we have another main that can be run
+ ./jsonTest > something
+
 
 if you want to run parralel we can use:
 OMP_NUM_THREADS=10 ./buildOpenMP/raytracer > something

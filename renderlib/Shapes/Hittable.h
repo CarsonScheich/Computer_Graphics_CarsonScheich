@@ -6,6 +6,7 @@
 #include "../ray.h"
 #include "../vec3.h"
 #include "../color.h"
+#include "../AABB.h"
 #include <memory>
 #include <vector>
 
@@ -18,6 +19,7 @@ struct HitRecord {
     color hit_color = color(.5,.5,.5);
     std::shared_ptr<Shader> shader;
     bool front_face;
+
 };
 
 using std::make_shared;
@@ -25,8 +27,11 @@ using std::shared_ptr;
 
 class Shape {
 public:
-    virtual bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const = 0;
+    virtual ~Shape() = default;
+    Shape() = default;;
 
+    virtual bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const = 0;
+    virtual AABB bounding_box() const = 0;
 
 };
 

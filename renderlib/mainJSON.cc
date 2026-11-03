@@ -14,6 +14,6 @@ int main(int argc, char* argv[]) {
     Scene sceneJSON;
     std::shared_ptr<ISceneLoader> loader = std::make_shared<SceneLoader>(sceneJSON);
     SceneParser_JSON parser(loader);
-    parser.parseFileData("");
+    parser.parseFileData("../sceneData/scenes_A/oneSphere.json");
     return 0;
 }

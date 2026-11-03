@@ -13,6 +13,9 @@ randomOffset.h
 Scene.h 
 Scene.cpp 
 randomOffset.h
+BVH.h 
+BVH.cpp 
+AABB.h 
 )
 
 target_include_directories(renderlib PUBLIC

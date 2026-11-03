@@ -6,6 +6,8 @@
 #include "Hittable.h"
 #include "color.h"
 #include "../Shader_Light/Shader.h"
+#include "../AABB.h"
+#include "../BVH.h"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -17,8 +19,17 @@ class Sphere : public Shape {
     Sphere(const point3& center, double radius, color col, std::shared_ptr<Shader> shade) 
     : center(center), radius(std::fmax(0,radius)), Sphere_color(col), shader(shade){}
 
+    AABB bounding_box() const override {
+    vec3 radiusVec(radius, radius, radius);
+    return AABB(
+        center - radiusVec,
+        center + radiusVec
+    );
 
-bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const override {
+}
+
+
+    bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const override {
 
     vec3 oc = r.origin() - center;
     auto a = dot(r.direction(), r.direction());

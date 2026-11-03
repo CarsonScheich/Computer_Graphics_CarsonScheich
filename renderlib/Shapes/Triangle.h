@@ -3,6 +3,8 @@
 
 #include "Hittable.h"
 #include "color.h"
+#include "../vec3.h"
+#include "../AABB.h"
 
 
 
@@ -12,6 +14,20 @@ class Triangle : public Shape {
     Triangle(const point3 alpha, const point3 beta, const point3 gamma, color col, std::shared_ptr<Shader> shade) 
     : alpha(alpha), beta(beta), gamma(gamma), Triangle_color(col), shader(shade){}
     
+    AABB bounding_box() const override {
+    point3 minimum(
+        std::min({alpha.x(), beta.x(), gamma.x()}),
+        std::min({alpha.y(), beta.y(), gamma.y()}),
+        std::min({alpha.z(), beta.z(), gamma.z()})
+    );
+    point3 maximum(
+        std::max({alpha.x(), beta.x(), gamma.x()}),
+        std::max({alpha.y(), beta.y(), gamma.y()}),
+        std::max({alpha.z(), beta.z(), gamma.z()})
+    );
+    return AABB(minimum, maximum);
+}
+
     bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const override{
         double a = alpha.x() - beta.x();
         double b = alpha.y() - beta.y();

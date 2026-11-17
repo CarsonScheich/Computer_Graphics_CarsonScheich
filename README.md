@@ -38,6 +38,17 @@ for reading in a JSON right now we have another main that can be run
  Commenting this out will still allow the program to run
 
 
+ For OpenGL we we that that in file /OpenGL/glfwExample 
+ so to run this we can be in buildVCPkg and run
+ ```
+ ./OpenGL/glfwExample 
+ ```
+ Then when this opens, you can press:
+P key to go inbetween blinnphong and lambertian
+ A and D move the object left or right
+ W and S move the camers forward or backward
+
+
 Your executables will then be in the build folder. They may be in sub-folders depending on the environment.
 
 

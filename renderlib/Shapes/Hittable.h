@@ -33,6 +33,7 @@ public:
     virtual bool hit(double t_min, double t_max, const ray& r, HitRecord& rec) const = 0;
     virtual AABB bounding_box() const = 0;
 
+    virtual std::vector<float> getOpenGLVertices(int subdivisions = 3) const = 0;
 };
 
 

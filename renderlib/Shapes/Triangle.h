@@ -2,9 +2,13 @@
 #define TRIANGLE_H
 
 #include "Hittable.h"
-#include "color.h"
+#include "../color.h"
 #include "../vec3.h"
 #include "../AABB.h"
+
+#include <algorithm>
+#include <array>
+#include <vector>
 
 
 
@@ -81,6 +85,25 @@ class Triangle : public Shape {
     }
 
 
+    //CODE mainly for OpenGL convertion
+    std::vector<float> getOpenGLVertices(int subdivisions = 3) const override{
+        point3 n = unit_vector(cross(beta - alpha, gamma - alpha));
+
+        std::vector<float> buffer;
+
+        for (const point3& p : {alpha, beta, gamma}){
+            buffer.insert(buffer.end(), {
+                static_cast<float>(p.x()),
+                static_cast<float>(p.y()),
+                static_cast<float>(p.z()),
+
+                static_cast<float>(n.x()),
+                static_cast<float>(n.y()),
+                static_cast<float>(n.z()),
+            });
+        }
+        return buffer;
+    }
 
     private:
     point3 alpha, beta, gamma;

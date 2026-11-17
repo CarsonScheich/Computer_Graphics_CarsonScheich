@@ -25,6 +25,11 @@ public:
     AABB bounding_box() const override {
         return bbox;
     }
+
+    std::vector<float> getOpenGLVertices(int subdivisions = 3) const override {
+    return {};
+    } 
 };
+
 
 #endif

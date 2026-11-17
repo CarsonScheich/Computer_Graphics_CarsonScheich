@@ -11,6 +11,9 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+
+#include "../renderlib/renderlib.h"
+
 #include "GLSL.h"
 
 int CheckGLErrors(const char *s)
@@ -121,12 +124,18 @@ int main(void)
 
     glGenBuffers(1, m_triangleVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
+    Sphere sphere(
+        point3(0, 0, 0), 
+        2.0,             
+        color(0.2, 0.6, 1.0),
+        nullptr
+    );
 
-    std::vector<float> host_VertexBuffer{
-        -3.0f, -3.0f, 0.0f,
-         3.0f, -3.0f, 0.0f,
-         0.0f,  3.0f, 0.0f
-    };
+    std::vector<float> host_VertexBuffer =
+        sphere.getOpenGLVertices();
+
+    GLsizei vertexCount =
+        static_cast<GLsizei>(host_VertexBuffer.size() / 6);
 
     int numBytes = host_VertexBuffer.size() * sizeof(float);
 
@@ -151,14 +160,26 @@ int main(void)
 
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
-    glVertexAttribPointer(
-        0,
-        3,
-        GL_FLOAT,
-        GL_FALSE,
-        3 * sizeof(GLfloat),
-        0
-    );
+// Position
+glVertexAttribPointer(
+    0,
+    3,
+    GL_FLOAT,
+    GL_FALSE,
+    6 * sizeof(GLfloat),
+    (void*)0
+);
+
+// Normal
+glEnableVertexAttribArray(1);
+glVertexAttribPointer(
+    1,
+    3,
+    GL_FLOAT,
+    GL_FALSE,
+    6 * sizeof(GLfloat),
+    (void*)(3 * sizeof(GLfloat))
+);
 
     glBindVertexArray(0);
 
@@ -169,26 +190,33 @@ int main(void)
     float triangleRotation = 0.0f;
 
 
-    // Setup shaders
-    sivelab::GLSLObject shader;
+// Setup shaders
+sivelab::GLSLObject shader;
 
-    shader.addShader(
-        "vertexShader_passthrough.glsl",
-        sivelab::GLSLObject::VERTEX_SHADER
-    );
+shader.addShader(
+    "vertexShader_PrepForFragment.glsl",
+    sivelab::GLSLObject::VERTEX_SHADER
+);
 
-    shader.addShader(
-        "fragmentShader_passthrough.glsl",
-        sivelab::GLSLObject::FRAGMENT_SHADER
-    );
+shader.addShader(
+    "vertexShader_Lambertian.glsl",
+    sivelab::GLSLObject::FRAGMENT_SHADER
+);
 
-    shader.createProgram();
-
+shader.createProgram();
 
     //Get all three matrix uniforms
     GLuint projMatrixID = shader.createUniform("projMatrix");
     GLuint viewMatrixID = shader.createUniform("viewMatrix");
     GLuint modelMatrixID = shader.createUniform("modelMatrix");
+    GLint lightPosID = shader.createUniform("lightPos");
+    GLint cameraPosID = shader.createUniform("cameraPos");
+    GLint useBlinnPhongID = shader.createUniform("useBlinnPhong");
+
+    bool useBlinnPhong = false;
+    bool previousPkeyDown = false;
+
+    glm::vec3 objectPosition(0.0f);
 
 
     /* Loop until the user closes the window */
@@ -228,10 +256,7 @@ int main(void)
         glm::mat4 M_model(1.0f);
 
         // Move triangle left and right
-         M_model = glm::translate(
-             M_model,
-             glm::vec3(0.0f, 0.0f, 0.0f)
-        );
+        M_model = glm::translate(M_model, objectPosition);
         // Rotate triangle around Y-axis
         if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
             triangleRotation += static_cast<float>(timeDiff);
@@ -273,9 +298,21 @@ int main(void)
             glm::value_ptr(M_model)
         );
 
+        // Light position
+        glUniform3f(lightPosID, 0.0f, -0.75f, 5.0f);
+
+        // Camera position
+        glUniform3fv(
+        cameraPosID,
+        1,
+        glm::value_ptr(camera.position)
+        );
+
+        // Which shading model to use
+        glUniform1i(useBlinnPhongID, useBlinnPhong ? 1 : 0);
 
         glBindVertexArray(m_VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
         glBindVertexArray(0);
 
         shader.deactivate();
@@ -287,6 +324,16 @@ int main(void)
         // Poll for events
         glfwPollEvents();
 
+        bool pKeyDown = glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS;
+
+        if (pKeyDown && !previousPkeyDown) {
+        useBlinnPhong = !useBlinnPhong;
+        std::cout << (useBlinnPhong ? "Blinn-Phong" : "Lambertian")
+              << " shading" << std::endl;
+        }
+
+        previousPkeyDown = pKeyDown;
+
 
         // Camera movement
         float moveRatePerFrame = 0.05f;
@@ -295,13 +342,13 @@ int main(void)
             camera.position += camera.forward * moveRatePerFrame;
         }
         else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            camera.position -= camera.right() * moveRatePerFrame;
+            objectPosition.x -= moveRatePerFrame;
         }
         else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             camera.position -= camera.forward * moveRatePerFrame;
         }
         else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            camera.position += camera.right() * moveRatePerFrame;
+            objectPosition.x += moveRatePerFrame;
         }
 
 

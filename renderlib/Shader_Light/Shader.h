@@ -3,7 +3,7 @@
 
 #include "../vec3.h"
 #include "../Shapes/Hittable.h"
-#include "color.h"
+#include "../color.h"
 #include "Light.h"
 
 

@@ -52,6 +52,21 @@ class Rectangle: public Shape{
     }
 
 
+    //CODE mainly for OpenGL
+    std::vector<float> getOpenGLVertices(int subdivisions = 3) const override{
+        std::vector<float> buffer;
+
+        for (const Triangle currentTriangle: List_tringles){
+            auto vertices = currentTriangle.getOpenGLVertices();
+            buffer.insert(
+                buffer.end(), 
+                vertices.begin(), 
+                vertices.end());
+        }
+        return buffer;
+    }
+
+
     private:
     point3 alpha, beta, gamma;
     color Square_color;

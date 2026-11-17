@@ -24,7 +24,7 @@ color Scene::ray_color(const ray& r, int depth) {
         return rec.shader->raycolor(rec);
         }
         if (lights.empty()) {
-            return color(0,0,0);
+            return color(0,0,0); 
         }
         color finalColor = rec.hit_color * 0.05;
         for (const auto& light : lights){

@@ -43,6 +43,21 @@ class Box : public Shape {
         return hitAnything;
     }
 
+    //CODE mainly for OpenGL
+    std::vector<float> getOpenGLVertices(int subdivisions = 3) const override{
+        std::vector<float> buffer;
+
+        for (const Rectangle& currentFace: faces){
+            auto vertices = currentFace.getOpenGLVertices();
+            buffer.insert(
+                buffer.end(),
+                vertices.begin(),
+                vertices.end());
+        }
+        return buffer;
+    }
+
+
     private:
         std::vector<Rectangle> faces;
         AABB bbox;
